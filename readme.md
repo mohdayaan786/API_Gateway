@@ -1,4 +1,3 @@
-Here's a cleaned-up and well-formatted README for your content:  
 
 ---
 
@@ -22,5 +21,3 @@ In a microservices architecture, we introduce an **intermediate layer (Middle-En
 By implementing an API Gateway as a **Middle-End**, we optimize request handling, improve performance, and ensure seamless integration between the client and backend services. 🚀  
 
 ---
-
-Let me know if you need further modifications! 😊
