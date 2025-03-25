@@ -3,9 +3,9 @@ const morgan = require('morgan');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { rateLimit } = require('express-rate-limit');
 const axios = require('axios');
+const { PORT, PORT1, PORT2, PORT3 } = require('./config/server_config');
 
 const app = express();
-const port = 3004;
 
 app.use(morgan('combined'));
 
@@ -15,15 +15,26 @@ const limiter = rateLimit({
 });
 
 const apiProxy = createProxyMiddleware({
-    target: 'http://localhost:3002',
+    target: `http://localhost:${PORT3}`,
     changeOrigin: true,
 });
+
+const apiProxy2 = createProxyMiddleware({
+    target: `http://localhost:${PORT1}`,
+    changeOrigin: true,
+});
+
+const apiProxy3 = createProxyMiddleware({
+    target: `http://localhost:${PORT2}`,
+    changeOrigin: true,
+});
+
 app.use(limiter);
 
 app.use('/bookingservice', async (req, res, next) => {
     console.log(req.headers['x-access-token']);
     try {
-        const response = await axios.get('http://localhost:3001/api/v1/isAuthenticated', {
+        const response = await axios.get(`http://localhost:${PORT2}/api/v1/isAuthenticated`, {
             headers: {
                 'x-access-token': req.headers['x-access-token']
             }
@@ -41,11 +52,13 @@ app.use('/bookingservice', async (req, res, next) => {
 });
 
 app.use('/bookingservice', apiProxy);
+app.use('/flightandsearchservice', apiProxy2);
+app.use('/authservice', apiProxy3);
 
 app.get('/home', (req, res) => {
     res.send('Welcome to the API Gateway!');
 });
 
-app.listen(port, () => {
-    console.log(`API Gateway listening on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`API Gateway listening on port ${PORT}`);
 });
