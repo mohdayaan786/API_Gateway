@@ -39,7 +39,7 @@ PORT3=3002
 ### 3️⃣ Start the API Gateway  
 Run the command:  
 ```sh
-node index.js
+npm start
 ```
 
 ## **Routing and Middleware**  
